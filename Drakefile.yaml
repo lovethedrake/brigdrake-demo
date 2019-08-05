@@ -1,0 +1,29 @@
+version: v1.0.0
+
+baseDemoContainer: &baseDemoContainer
+  name: demo
+  image: debian:stretch
+
+jobs:
+
+  foo:
+    containers:
+    - <<: *baseDemoContainer
+      command: echo foo
+
+  bar:
+    containers:
+    - <<: *baseDemoContainer
+      command: echo bar
+
+pipelines:
+
+  ci:
+    criteria:
+      branches:
+        only:
+        - /.*/
+    stages:
+    - jobs:
+      - foo
+      - bar
