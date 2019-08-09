@@ -18,11 +18,32 @@ jobs:
 
 pipelines:
 
-  ci:
+  test:
+    criteria:
+      branches:
+        ignore:
+        - master
+        - gh-pages
+    stages:
+    - jobs:
+      - foo
+      - bar
+
+  master:
     criteria:
       branches:
         only:
-        - /.*/
+        - master
+    stages:
+    - jobs:
+      - foo
+      - bar
+
+  release:
+    criteria:
+      tags:
+        only:
+        - /v[0-9]+(\.[0-9]+)*(\-.+)?/
     stages:
     - jobs:
       - foo
