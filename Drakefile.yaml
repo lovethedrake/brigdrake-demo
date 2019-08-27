@@ -23,7 +23,8 @@ pipelines:
       branches:
         only:
         - /.*/
-    stages:
-    - jobs:
+    jobs:
+    - name: foo
+    - name: bar
+      dependencies:
       - foo
-      - bar
