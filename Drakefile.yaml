@@ -19,10 +19,15 @@ jobs:
 pipelines:
 
   ci:
-    criteria:
-      branches:
-        only:
-        - /.*/
+    triggers:
+    - spec:
+        uri: github.com/lovethedrake/drakespec-github
+        version: v1.0.0
+      config:
+        checkSuiteRequest:
+          branches:
+            only:
+            - /.*/
     jobs:
     - name: foo
     - name: bar
