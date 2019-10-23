@@ -1,8 +1,11 @@
-version: v1.0.0
+specUri: github.com/lovethedrake/drakespec
+specVersion: v0.1.0
 
-baseDemoContainer: &baseDemoContainer
-  name: demo
-  image: debian:stretch
+snippets:
+
+  baseDemoContainer: &baseDemoContainer
+    name: demo
+    image: debian:stretch
 
 jobs:
 
@@ -20,9 +23,8 @@ pipelines:
 
   ci:
     triggers:
-    - spec:
-        uri: github.com/lovethedrake/drakespec-github
-        version: v1.0.0
+    - specUri: github.com/lovethedrake/drakespec-github
+      specVersion: v1.0.0
       config:
         checkSuiteRequest:
           branches:
