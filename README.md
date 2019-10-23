@@ -1,6 +1,6 @@
-# brigdrake-demo
+# BrigDrake Demo
 
-This is a dedicated repository for demonstrating brigdrake. Its existence means
+This is a dedicated repository for demonstrating BrigDrake. Its existence means
 we don't have to pollute other [lovethedrake](https://github.com/lovethedrake)
 repositories with nonsense PRs.
 
