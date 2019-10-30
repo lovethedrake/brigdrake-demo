@@ -12,12 +12,14 @@ jobs:
   foo:
     containers:
     - <<: *baseDemoContainer
-      command: echo foo
+      command: ["echo"]
+      args: ["foo"]
 
   bar:
     containers:
     - <<: *baseDemoContainer
-      command: echo bar
+      command: ["echo"]
+      args: ["bar"]
 
 pipelines:
 
