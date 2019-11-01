@@ -28,7 +28,11 @@ pipelines:
     - specUri: github.com/lovethedrake/drakespec-github
       specVersion: v1.0.0
       config:
-        checkSuiteRequest:
+        pullRequest:
+          targetBranches:
+            only:
+            - /.*/
+        push:
           branches:
             only:
             - /.*/
