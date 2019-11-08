@@ -1,5 +1,5 @@
 specUri: github.com/lovethedrake/drakespec
-specVersion: v0.1.0
+specVersion: v0.3.0
 
 snippets:
 
@@ -10,14 +10,14 @@ snippets:
 jobs:
 
   foo:
-    containers:
-    - <<: *baseDemoContainer
+    primaryContainer:
+      <<: *baseDemoContainer
       command: ["echo"]
       args: ["foo"]
 
   bar:
-    containers:
-    - <<: *baseDemoContainer
+    primaryContainer:
+      <<: *baseDemoContainer
       command: ["echo"]
       args: ["bar"]
 
