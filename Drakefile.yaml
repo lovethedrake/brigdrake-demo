@@ -1,25 +1,27 @@
 specUri: github.com/lovethedrake/drakespec
 specVersion: v0.4.0
 
-snippets:
-
-  baseDemoContainer: &baseDemoContainer
-    name: demo
-    image: debian:stretch
-
 jobs:
 
   foo:
     primaryContainer:
-      <<: *baseDemoContainer
+      name: demo
+      image: debian:stretch
       command: ["echo"]
       args: ["foo"]
 
   bar:
     primaryContainer:
-      <<: *baseDemoContainer
+      name: demo
+      image: debian:stretch
       command: ["echo"]
       args: ["bar"]
+
+  fail:
+    primaryContainer:
+      name: demo
+      image: debian:stretch
+      command: ["false"]
 
 pipelines:
 
