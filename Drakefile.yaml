@@ -3,25 +3,57 @@ specVersion: v0.5.0
 
 snippets:
 
-  baseDemoContainer: &baseDemoContainer
+  baseLinuxDemoContainer: &baseLinuxDemoContainer
     name: demo
     image: debian:stretch
+  
+  baseWindowsDemoContainer: &baseWindowsDemoContainer
+    name: demo
+    image: mcr.microsoft.com/windows/servercore:ltsc2019
 
 jobs:
 
   foo:
     primaryContainer:
-      <<: *baseDemoContainer
+      <<: *baseLinuxDemoContainer
       command: ["echo"]
       args: ["foo"]
 
   bar:
     primaryContainer:
-      <<: *baseDemoContainer
+      <<: *baseLinuxDemoContainer
       command: ["echo"]
       args: ["bar"]
 
+  # These next two jobs are equivalent to the two above, but use Windows-- just
+  # to show we can. Obviously, these will only run where a Windows host is
+  # available.
+
+  foo-win:
+    primaryContainer:
+      <<: *baseWindowsDemoContainer
+      command: ["cmd.exe"]
+      args: ["/C", "echo foo"]
+    osFamily: windows
+
+  bar-win:
+    primaryContainer:
+      <<: *baseWindowsDemoContainer
+      command: ["cmd.exe"]
+      args: ["/C", "echo bar"]
+    osFamily: windows
+
 pipelines:
+
+  # The ci pipeline is the one that is normally triggered when a PR is opened
+  # against the lovethedrake/brigdrake-demo project. It deliberately is composed
+  # only of jobs that use Linux containers since we don't plan to have Windows
+  # hosts hanging around long-term in the Kubernetes cluster that is hosting
+  # our brigdrake.
+  #
+  # A user **with adequate permissions** can also manually trigger this with:
+  #
+  #  brig run lovethedrake/brigdrake-demo -e demo
 
   ci:
     triggers:
@@ -36,8 +68,57 @@ pipelines:
           branches:
             only:
             - /.*/
+    - specUri: github.com/lovethedrake/drakespec-brig
+      specVersion: v1.0.0
+      config:
+        eventTypes:
+        - demo
     jobs:
     - name: foo
     - name: bar
+      dependencies:
+      - foo
+
+  # The windows-demo pipeline is equivalent to the ci pipeline above, but is
+  # composed only of jobs that use Windows containers. This can only be run when
+  # Windows nodes are available in the Kubernetes cluster that is hosting
+  # our brigdrake.
+  #
+  # A user **with adequate permissions** can manually trigger this with:
+  #
+  #  brig run lovethedrake/brigdrake-demo -e windows-demo
+
+  windows-demo:
+    triggers:
+    - specUri: github.com/lovethedrake/drakespec-brig
+      specVersion: v1.0.0
+      config:
+        eventTypes:
+        - windows-demo
+    jobs:
+    - name: foo-win
+    - name: bar-win
+      dependencies:
+      - foo-win
+
+  # The mixed-demo pipeline is equivalent to the ci pipeline above, but is
+  # composed of a job that uses a Linux container AND a job that uses a Windows
+  # containers. This can only be run when Windows nodes are available in the
+  # Kubernetes cluster that is hosting our brigdrake.
+  #
+  # A user **with adequate permissions** can manually trigger this with:
+  #
+  #  brig run lovethedrake/brigdrake-demo -e mixed-demo
+
+  mixed-demo:
+    triggers:
+    - specUri: github.com/lovethedrake/drakespec-brig
+      specVersion: v1.0.0
+      config:
+        eventTypes:
+        - mixed-demo
+    jobs:
+    - name: foo
+    - name: bar-win
       dependencies:
       - foo
