@@ -16,8 +16,9 @@ jobs:
   foo:
     primaryContainer:
       <<: *baseLinuxDemoContainer
-      command: ["echo"]
-      args: ["foo"]
+      command: ["bash"]
+      args: ["-c", "echo foo > /shared/foo.txt"]
+      sharedStorageMountPath: /shared
 
   bar:
     primaryContainer:
@@ -40,7 +41,8 @@ jobs:
     primaryContainer:
       <<: *baseWindowsDemoContainer
       command: ["cmd.exe"]
-      args: ["/C", "echo bar"]
+      args: ["/C", "type \\shared\\foo.txt"]
+      sharedStorageMountPath: /shared
     osFamily: windows
 
 pipelines:
@@ -57,17 +59,6 @@ pipelines:
 
   ci:
     triggers:
-    - specUri: github.com/lovethedrake/drakespec-github
-      specVersion: v1.0.0
-      config:
-        pullRequest:
-          targetBranches:
-            only:
-            - /.*/
-        push:
-          branches:
-            only:
-            - /.*/
     - specUri: github.com/lovethedrake/drakespec-brig
       specVersion: v1.0.0
       config:
@@ -112,6 +103,17 @@ pipelines:
 
   mixed-demo:
     triggers:
+    - specUri: github.com/lovethedrake/drakespec-github
+      specVersion: v1.0.0
+      config:
+        pullRequest:
+          targetBranches:
+            only:
+            - /.*/
+        push:
+          branches:
+            only:
+            - /.*/
     - specUri: github.com/lovethedrake/drakespec-brig
       specVersion: v1.0.0
       config:
