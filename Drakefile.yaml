@@ -25,6 +25,12 @@ jobs:
       command: ["echo"]
       args: ["bar"]
 
+  seq:
+    primaryContainer:
+      <<: *baseLinuxDemoContainer
+      command: ["seq"]
+      args: ["1", "100"]
+
   # These next two jobs are equivalent to the two above, but use Windows-- just
   # to show we can. Obviously, these will only run where a Windows host is
   # available.
@@ -76,8 +82,10 @@ pipelines:
     jobs:
     - name: foo
     - name: bar
+    - name: seq
       dependencies:
       - foo
+      - bar
 
   # The windows-demo pipeline is equivalent to the ci pipeline above, but is
   # composed only of jobs that use Windows containers. This can only be run when
