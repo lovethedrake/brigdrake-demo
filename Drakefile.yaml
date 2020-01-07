@@ -28,8 +28,8 @@ jobs:
   seq:
     primaryContainer:
       <<: *baseLinuxDemoContainer
-      command: ["seq"]
-      args: ["1", "100"]
+      command: ['bash']
+      args: ['-c', 'for i in $(seq 1 200); do for j in $(seq 1 5000); do echo "$i $j"; done; sleep 1; done']
 
   # These next two jobs are equivalent to the two above, but use Windows-- just
   # to show we can. Obviously, these will only run where a Windows host is
